@@ -1,0 +1,1 @@
+{"version":2,"defects":{"Tests\\VehicleServiceTest::testValidateAndSanitizeReturnsCleanData":8,"Tests\\VehicleServiceTest::testEnsureReadonlyBuildYearThrowsWhenChanged":8},"times":{"Tests\\VehicleServiceTest::testValidateAndSanitizeReturnsCleanData":0.056,"Tests\\VehicleServiceTest::testEnsureReadonlyBuildYearThrowsWhenChanged":0.002}}
