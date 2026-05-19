@@ -14,7 +14,7 @@ final class VehicleServiceTest extends TestCase
     public function testValidateAndSanitizeReturnsCleanData(): void
     {
         $repository = $this->createMock(VehicleRepository::class);
-        $repository->method('availableFuelTypes')->willReturn(['Benzine', 'Diesel', 'Elektrisch', 'Hybride']);
+        $repository->method('availableFuelTypes')->willReturn(['Diesel', 'Benzine', 'Elektrisch']);
 
         $service = new VehicleService($repository);
 

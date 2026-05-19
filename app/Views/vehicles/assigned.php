@@ -5,70 +5,70 @@ declare(strict_types=1);
 $pageCount = (int) ceil($total / $perPage);
 $instructorName = trim(sprintf('%s %s %s', $instructor['Voornaam'], $instructor['Tussenvoegsel'] ?? '', $instructor['Achternaam']));
 ?>
-<section class="hero">
-    <div>
-        <p class="chip">Scenario 01, 02 en 04</p>
-        <h1><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?></h1>
-        <p>Voertuigen van <?= htmlspecialchars($instructorName, ENT_QUOTES, 'UTF-8') ?>, gesorteerd op rijbewijscategorie. Hier kun je bestaande toewijzingen wijzigen.</p>
-    </div>
-</section>
+<h1>Door Instructeur gebruikte voertuigen</h1>
 
-<section class="card">
-    <?php if ($flash !== ''): ?>
-        <div class="alert alert-success"><?= htmlspecialchars($flash, ENT_QUOTES, 'UTF-8') ?></div>
-    <?php endif; ?>
+<?php if ($flash !== ''): ?>
+    <div class="flash"><?= htmlspecialchars($flash, ENT_QUOTES, 'UTF-8') ?></div>
+<?php endif; ?>
 
-    <div class="toolbar">
-        <div>
-            <strong><?= htmlspecialchars($instructorName, ENT_QUOTES, 'UTF-8') ?></strong>
-            <div class="meta"><?= htmlspecialchars((string) $instructor['AantalSterren'], ENT_QUOTES, 'UTF-8') ?> sterren</div>
-        </div>
-        <div class="actions">
-            <a class="btn btn-secondary" href="/instructors">Terug naar instructeurs</a>
-            <a class="btn" href="/vehicles/available?instructor_id=<?= (int) $instructor['Id'] ?>">Toevoegen voertuig</a>
-        </div>
-    </div>
+<div class="meta-block">
+    <div>Naam: [<?= htmlspecialchars($instructorName, ENT_QUOTES, 'UTF-8') ?>]</div>
+    <div>Datum in dienst : [<?= htmlspecialchars((string) $instructor['DatumInDienst'], ENT_QUOTES, 'UTF-8') ?>]</div>
+    <div>Aantal sterren : [<?= htmlspecialchars((string) $instructor['AantalSterren'], ENT_QUOTES, 'UTF-8') ?>]</div>
+</div>
 
-    <?php if ($vehicles === []): ?>
-        <div class="empty">Deze instructeur heeft momenteel geen toegewezen voertuigen.</div>
-    <?php else: ?>
-        <table>
-            <thead>
+<div class="toolbar">
+    <a class="btn" href="/vehicles/available?instructor_id=<?= (int) $instructor['Id'] ?>">Toevoegen Voertuig</a>
+</div>
+
+<?php if ($vehicles === []): ?>
+    <div class="empty">Geen voertuigen gevonden.</div>
+<?php else: ?>
+    <table>
+        <thead>
+        <tr>
+            <th>Type Voertuig</th>
+            <th>Type</th>
+            <th>Kenteken</th>
+            <th>Bouwjaar</th>
+            <th>Brandstof</th>
+            <th>Rijbewijscategorie</th>
+            <th>Wijzigen</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($vehicles as $vehicle): ?>
             <tr>
-                <th>Kenteken</th>
-                <th>Type</th>
-                <th>Brandstof</th>
-                <th>Rijbewijscategorie</th>
-                <th>Bouwjaar</th>
-                <th>Actie</th>
+                <td><?= htmlspecialchars((string) $vehicle['TypeVoertuig'], ENT_QUOTES, 'UTF-8') ?></td>
+                <td><?= htmlspecialchars((string) $vehicle['Type'], ENT_QUOTES, 'UTF-8') ?></td>
+                <td><?= htmlspecialchars((string) $vehicle['Kenteken'], ENT_QUOTES, 'UTF-8') ?></td>
+                <td><?= htmlspecialchars((string) $vehicle['Bouwjaar'], ENT_QUOTES, 'UTF-8') ?></td>
+                <td><?= htmlspecialchars((string) $vehicle['Brandstof'], ENT_QUOTES, 'UTF-8') ?></td>
+                <td><?= htmlspecialchars((string) $vehicle['Rijbewijscategorie'], ENT_QUOTES, 'UTF-8') ?></td>
+                <td class="icon-cell">
+                    <a class="icon-link" href="/vehicles/edit?id=<?= (int) $vehicle['Id'] ?>&instructor_id=<?= (int) $instructor['Id'] ?>&origin=assigned" title="Wijzigen" aria-label="Wijzigen">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M5 18.8l3.3-.8 8.4-8.5-2.6-2.6-8.5 8.5z"></path>
+                            <path d="M13.9 6.8l2.6 2.6"></path>
+                            <path d="M4.6 19.3h4"></path>
+                            <path d="M17.2 5.8l1.1 1.1"></path>
+                        </svg>
+                    </a>
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($vehicles as $vehicle): ?>
-                <tr>
-                    <td data-label="Kenteken"><?= htmlspecialchars((string) $vehicle['Kenteken'], ENT_QUOTES, 'UTF-8') ?></td>
-                    <td data-label="Type"><?= htmlspecialchars((string) $vehicle['Type'], ENT_QUOTES, 'UTF-8') ?></td>
-                    <td data-label="Brandstof"><?= htmlspecialchars((string) $vehicle['Brandstof'], ENT_QUOTES, 'UTF-8') ?></td>
-                    <td data-label="Rijbewijscategorie"><?= htmlspecialchars((string) $vehicle['Rijbewijscategorie'], ENT_QUOTES, 'UTF-8') ?></td>
-                    <td data-label="Bouwjaar"><?= htmlspecialchars((string) $vehicle['Bouwjaar'], ENT_QUOTES, 'UTF-8') ?></td>
-                    <td data-label="Actie">
-                        <a class="btn" href="/vehicles/edit?id=<?= (int) $vehicle['Id'] ?>&instructor_id=<?= (int) $instructor['Id'] ?>&origin=assigned">Wijzigen</a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php endif; ?>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
 
-    <?php if ($pageCount > 1): ?>
-        <nav class="pagination">
-            <?php if ($page > 1): ?>
-                <a class="btn btn-secondary" href="/vehicles?instructor_id=<?= (int) $instructor['Id'] ?>&page=<?= $page - 1 ?>">Vorige</a>
-            <?php endif; ?>
-            <span class="meta">Pagina <?= $page ?> van <?= $pageCount ?></span>
-            <?php if ($page < $pageCount): ?>
-                <a class="btn btn-secondary" href="/vehicles?instructor_id=<?= (int) $instructor['Id'] ?>&page=<?= $page + 1 ?>">Volgende</a>
-            <?php endif; ?>
-        </nav>
-    <?php endif; ?>
-</section>
+<?php if ($pageCount > 1): ?>
+    <nav class="pagination">
+        <?php if ($page > 1): ?>
+            <a class="btn" href="/vehicles?instructor_id=<?= (int) $instructor['Id'] ?>&page=<?= $page - 1 ?>">Vorige</a>
+        <?php endif; ?>
+        <span>Pagina <?= $page ?> van <?= $pageCount ?></span>
+        <?php if ($page < $pageCount): ?>
+            <a class="btn" href="/vehicles?instructor_id=<?= (int) $instructor['Id'] ?>&page=<?= $page + 1 ?>">Volgende</a>
+        <?php endif; ?>
+    </nav>
+<?php endif; ?>

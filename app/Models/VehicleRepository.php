@@ -136,7 +136,7 @@ class VehicleRepository
      */
     public function availableFuelTypes(): array
     {
-        return ['Benzine', 'Diesel', 'Elektrisch', 'Hybride'];
+        return ['Diesel', 'Benzine', 'Elektrisch'];
     }
 
     private function pdo(): PDO
