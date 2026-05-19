@@ -4,3 +4,4 @@
 /node_modules/
 /.env
 /.phpunit.result.cache
+/.phpunit.cache/
